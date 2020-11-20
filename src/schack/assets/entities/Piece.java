@@ -43,7 +43,7 @@ public abstract class Piece {
     }
 
     public List<Square> getAccessibleColumnSquares(){
-        return new ArrayList<>();
+        return new ArrayList<>(1);
     }
 
     public List<Square> getAccessibleDiagonalOneSquares() {
