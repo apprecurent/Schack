@@ -1,4 +1,4 @@
-package schack.entities;
+package schack.assets.entities;
 
 import schack.Board;
 import schack.Square;
@@ -38,6 +38,23 @@ public abstract class Piece {
         return this.square.getDiagonalTwo().getSquares();
     }
 
+    public List<Square> getAccessibleRowSquares() {
+        return new ArrayList<>();
+    }
+
+    public List<Square> getAccessibleColumnSquares(){
+        return new ArrayList<>();
+    }
+
+    public List<Square> getAccessibleDiagonalOneSquares() {
+        return new ArrayList<>();
+    }
+
+    public List<Square> getAccessibleDiagonalTwoSquares() {
+        return new ArrayList<>();
+
+    }
+
     /*
     Every time a piece is moved that has the ability to check the king after at least another move is made (Queen, Rook, Bishop),
     we will add all the pieces that are placed on its rows, columns and/or diagonals.
@@ -59,9 +76,10 @@ public abstract class Piece {
         checkablePieces.add(piece);
     }
 
-    // All the squares
+    // All the squares that are accessible (can move to or take)
     public abstract List<Square> getAccessibleSquares();
 
+    // All the squares that the Piece affects (
     public abstract List<Square> getAffectedSquares();
 
 

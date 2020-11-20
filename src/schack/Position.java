@@ -12,4 +12,6 @@ public class Position {
 
     }
 
+    public void change()
+
 }
