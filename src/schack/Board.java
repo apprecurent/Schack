@@ -4,6 +4,7 @@ import schack.fields.Column;
 import schack.fields.Diagonal;
 import schack.fields.Row;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
@@ -15,6 +16,12 @@ public class Board {
     private List<Square> squares;
 
     public Board() {
+
+        rows = new ArrayList<>();
+        columns = new ArrayList<>();
+        diagonals = new ArrayList<>();
+        squares = new ArrayList<>();
+
         for (int i = 0; i < 8; i++) {
             rows.add(new Row(this, i));
             columns.add(new Column(this, i));
@@ -29,6 +36,11 @@ public class Board {
                 squares.add(new Square(rows.get(i), columns.get(j)));
             }
         }
+
+    }
+
+    public void startPositions() {
+
     }
 
     public List<Square> getSquares() {
@@ -57,6 +69,17 @@ public class Board {
 
     public Diagonal getDiagonal(int id) {
         return diagonals.get(id);
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Row row : rows) {
+            for (Square square : row.getSquares()) {
+                sb.append(square.toString());
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
 }

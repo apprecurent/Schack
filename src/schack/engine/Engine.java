@@ -1,17 +1,19 @@
 package schack.engine;
 
+import schack.Board;
 import schack.Position;
+import schack.entities.Queen;
 
-import java.util.List;
+public class Engine implements IEngine {
+    @Override
+    public Position getMove(Position position) {
+        return null;
+    }
 
-public interface Engine {
+    public static void main(String[] args) {
+        Board board = new Board();
 
-    /**
-     * Gets the optimal position from a given position
-     * @param position the current position
-     * @return the position that will arise when performing the best possible move
-     */
-    public Position getMove(Position position);
-
-
+        board.getRow(0).getSquares().get(0).setPiece(new Queen(board.getRow(0).getSquares().get(0)));
+        System.out.println(board.toString());
+    }
 }

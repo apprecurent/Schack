@@ -14,7 +14,11 @@ public class Field {
 
     public Row getRow() {
         if (this instanceof Row) return (Row) this;
-        if (this instanceof Column) return this.getBoard().getRow(this.id);
+        if (this instanceof Column) {
+            return this.getBoard().getRow(this.id);
+        } else if (true) {
+            
+        }
 
         // check for right diagonal
 
@@ -42,6 +46,6 @@ public class Field {
     }
 
     public Board getBoard() {
-        return this.getBoard();
+        return this.board;
     }
 }

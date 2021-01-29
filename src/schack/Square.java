@@ -1,5 +1,6 @@
 package schack;
 
+import schack.entities.Piece;
 import schack.fields.Column;
 import schack.fields.Diagonal;
 import schack.fields.Row;
@@ -10,10 +11,19 @@ public class Square {
 
     private Row row;
     private Column column;
+    private Piece piece;
 
     public Square(Row row, Column column) {
         this.row = row;
         this.column = column;
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
+
+    public boolean hasPiece() {
+        return this.piece != null;
     }
 
     public Board getBoard() {
@@ -34,6 +44,12 @@ public class Square {
 
     public Diagonal getDiagonalTwo() {
         return getBoard().getDiagonals().get(22+row.getId()-column.getId());
+    }
+
+    public String toString() {
+        String pieceString = hasPiece() ?  ": "+ piece.toString() : "";
+        String string = "[" +column.getId() + ", " + row.getId()  + pieceString + "]";
+        return string;
     }
 
 

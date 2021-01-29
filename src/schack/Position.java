@@ -3,7 +3,7 @@ package schack;
 public class Position {
 
 
-    public Position(Square[][] squares) {
+    public Position(Board board) {
 
     }
 

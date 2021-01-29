@@ -1,6 +1,7 @@
 package schack.entities;
 
 import schack.Board;
+import schack.Color;
 import schack.Square;
 
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.List;
 
 public abstract class Piece {
 
-    private Board board;
     private Square square;
     private List<Piece> checkablePieces;
 
@@ -16,9 +16,8 @@ public abstract class Piece {
         checkablePieces = new ArrayList<>();
     }
 
-    public Piece(Board board, Square square) {
+    public Piece(Color color, Square square) {
         this();
-        this.board = board;
         this.square = square;
     }
 
@@ -62,7 +61,30 @@ public abstract class Piece {
     // All the squares
     public abstract List<Square> getAccessibleSquares();
 
+    // All the squares that this piece affects
     public abstract List<Square> getAffectedSquares();
+
+    public abstract List<Square> getAffectedRowSquares();
+    public abstract List<Square> getAffectedColumnSquares();
+    public abstract List<Square> getAffectedDiagonalOneSquares();
+    public abstract List<Square> getAffectedDiagonalTwoSquares();
+
+    // get all the moves that this piece has made
+    public List<Square> getMoves() {
+        return new ArrayList<>();
+    }
+
+    public void setSquare(Square square) {
+        this.square = square;
+    }
+
+    public Square getSquare() {
+        return this.square;
+    }
+
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 
 
 }
