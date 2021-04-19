@@ -1,13 +1,14 @@
 package schack.entities;
 
 import schack.Board;
+import schack.Color;
 import schack.Square;
 
 import java.util.List;
 
 public class King extends Piece {
-    public King(Square square) {
-        super(square);
+    public King(Color color, Square square) {
+        super(color, square);
     }
 
     @Override
@@ -38,5 +39,10 @@ public class King extends Piece {
     @Override
     public List<Square> getAffectedDiagonalTwoSquares() {
         return null;
+    }
+
+    @Override
+    public char abbreviation() {
+        return 'K';
     }
 }

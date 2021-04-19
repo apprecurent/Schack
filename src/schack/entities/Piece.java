@@ -5,12 +5,15 @@ import schack.Color;
 import schack.Square;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Piece {
 
     private Square square;
     private List<Piece> checkablePieces;
+    private Color color;
 
     private Piece() {
         checkablePieces = new ArrayList<>();
@@ -18,23 +21,172 @@ public abstract class Piece {
 
     public Piece(Color color, Square square) {
         this();
+        this.color = color;
         this.square = square;
     }
 
     public List<Square> getRowSquares() {
-        return this.square.getRow().getSquares();
+        List<Square> squares = new ArrayList<>(this.getSquare().getRow().getSquares());
+        squares.remove(this.getSquare());
+        List<Square> removeSquares = new ArrayList<>();
+
+        for (int i = squares.size() - 1; i >= 0; i--) {
+            Square square = squares.get(i);
+            if (square.hasPiece() && !square.getPiece().equals(this)) {
+
+
+                // Same Row
+                if (square.getRow().equals(this.getSquare().getRow())) {
+                    // Lower column id (more left)
+                    if (square.getColumn().getId() < this.getSquare().getColumn().getId()) {
+                        List<Square> belowRowSquares = this.getSquare().getRow().getSquares().subList(0, this.getSquare().getColumn().getId());
+                        for (int j = belowRowSquares.size() - 1; j >= 0; j--) {
+                            if (belowRowSquares.get(j).hasPiece()) {
+                                if (belowRowSquares.get(j).getPiece() instanceof King && belowRowSquares.get(j).getPiece().getColor() != this.getColor()) continue;
+                                removeSquares.addAll(belowRowSquares.subList(0, j));
+                                break;
+                            }
+                        }
+                        // Higher column id (more right)
+                    } else {
+                        List<Square> belowRowSquares = this.getSquare().getRow().getSquares().subList(this.getSquare().getColumn().getId() + 1, this.getSquare().getColumn().getSquares().size());
+                        for (int j = 0; j < belowRowSquares.size(); j++) {
+                            if (belowRowSquares.get(j).hasPiece()) {
+                                if (belowRowSquares.get(j).getPiece() instanceof King && belowRowSquares.get(j).getPiece().getColor() != this.getColor()) continue;
+                                removeSquares.addAll(belowRowSquares.subList(j + 1, belowRowSquares.size()));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        squares.removeAll(removeSquares);
+        return squares;
     }
 
     public List<Square> getColumnSquares() {
-        return this.square.getColumn().getSquares();
+        List<Square> squares = new ArrayList<>(this.getSquare().getColumn().getSquares());
+        squares.remove(this.getSquare());
+        List<Square> removeSquares = new ArrayList<>();
+        for (int i = squares.size() - 1; i >= 0; i--) {
+            Square square = squares.get(i);
+            if (square.hasPiece() && !square.getPiece().equals(this)) {
+                // Same column
+                if (square.getColumn().equals(getSquare().getColumn())) {
+                    // Lower row id (higher up)
+                    if (square.getRow().getId() < this.getSquare().getRow().getId()) {
+                        List<Square> belowRowSquares = this.getSquare().getColumn().getSquares().subList(0, this.getSquare().getRow().getId());
+                        for (int j = belowRowSquares.size() - 1; j >= 0; j--) {
+                            if (belowRowSquares.get(j).hasPiece()) {
+                                if (belowRowSquares.get(j).getPiece() instanceof King && belowRowSquares.get(j).getPiece().getColor() != this.getColor()) continue;
+                                removeSquares.addAll(belowRowSquares.subList(0, j));
+                                break;
+                            }
+                        }
+                        // Higher row id (lower down)
+                    } else {
+                        List<Square> belowRowSquares = this.getSquare().getColumn().getSquares().subList(this.getSquare().getRow().getId() + 1, this.getSquare().getRow().getSquares().size());
+                        for (int j = 0; j < belowRowSquares.size(); j++) {
+                            if (belowRowSquares.get(j).hasPiece()) {
+                                if (belowRowSquares.get(j).getPiece() instanceof King && belowRowSquares.get(j).getPiece().getColor() != this.getColor()) continue;
+                                removeSquares.addAll(belowRowSquares.subList(j + 1, belowRowSquares.size()));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        squares.removeAll(removeSquares);
+        return squares;
     }
 
     public List<Square> getDiagonalOneSquares() {
-        return this.square.getDiagonalOne().getSquares();
+        Set<Square> setSquares = new LinkedHashSet<>(this.getSquare().getDiagonalOne().getSquares());
+        setSquares.remove(this.getSquare());
+        List<Square> squares = new ArrayList<>(setSquares);
+        List<Square> removeSquares = new ArrayList<>();
+
+        for (int i = squares.size() - 1; i >= 0; i--) {
+            Square square = squares.get(i);
+            if (square.hasPiece() && !square.getPiece().equals(this)) {
+
+                // First diagonal
+                if (square.getDiagonalOne().equals(this.getSquare().getDiagonalOne())) {
+
+                    // More left
+                    if (square.getColumn().getId() < this.getSquare().getColumn().getId()) {
+
+                        // Reversed sublist from rook as the squares of a diagonal are attained in reversed order
+                        List<Square> belowRowSquares = this.getSquare().getDiagonalOne().getSquares().subList(this.getSquare().getDiagonalOne().getSquares().indexOf(this.getSquare()) + 1, this.getSquare().getDiagonalOne().getSquares().size());
+                        for (int j = 0; j < belowRowSquares.size(); j++) {
+                            if (belowRowSquares.get(j).hasPiece()) {
+                                if (belowRowSquares.get(j).getPiece() instanceof King && belowRowSquares.get(j).getPiece().getColor() != this.getColor()) continue;
+                                removeSquares.addAll(belowRowSquares.subList(j + 1, belowRowSquares.size()));
+                                break;
+                            }
+                        }
+                        // More right
+                    } else {
+                        List<Square> belowRowSquares = this.getSquare().getDiagonalOne().getSquares().subList(0, this.getSquare().getDiagonalOne().getSquares().indexOf(this.getSquare()));
+                        for (int j = belowRowSquares.size() - 1; j >= 0; j--) {
+                            if (belowRowSquares.get(j).hasPiece()) {
+                                if (belowRowSquares.get(j).getPiece() instanceof King && belowRowSquares.get(j).getPiece().getColor() != this.getColor()) continue;
+                                removeSquares.addAll(belowRowSquares.subList(0, j));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        squares.removeAll(removeSquares);
+
+        return squares;
     }
 
     public List<Square> getDiagonalTwoSquares() {
-        return this.square.getDiagonalTwo().getSquares();
+        Set<Square> setSquares = new LinkedHashSet<>(this.getSquare().getDiagonalTwo().getSquares());
+        setSquares.remove(this.getSquare());
+        List<Square> squares = new ArrayList<>(setSquares);
+        List<Square> removeSquares = new ArrayList<>();
+
+        for (int i = squares.size() - 1; i >= 0; i--) {
+            Square square = squares.get(i);
+            if (square.hasPiece() && !square.getPiece().equals(this)) {
+
+                if (square.getDiagonalTwo().equals(this.getSquare().getDiagonalTwo())) {
+                    // More left
+                    if (square.getColumn().getId() < this.getSquare().getColumn().getId()) {
+
+                        // Reversed sublist from rook as the squares of a diagonal are attained in reversed order
+
+                        List<Square> belowRowSquares = this.getSquare().getDiagonalTwo().getSquares().subList(0, this.getSquare().getDiagonalTwo().getSquares().indexOf(this.getSquare()));
+                        for (int j = belowRowSquares.size() - 1; j >= 0; j--) {
+                            if (belowRowSquares.get(j).hasPiece()) {
+                                if (belowRowSquares.get(j).getPiece() instanceof King && belowRowSquares.get(j).getPiece().getColor() != this.getColor()) continue;
+                                removeSquares.addAll(belowRowSquares.subList(0, j));
+                                break;
+                            }
+                        }
+                        // More right
+                    } else {
+                        List<Square> belowRowSquares = this.getSquare().getDiagonalTwo().getSquares().subList(this.getSquare().getDiagonalTwo().getSquares().indexOf(this.getSquare()) + 1, this.getSquare().getDiagonalTwo().getSquares().size());
+                        for (int j = 0; j < belowRowSquares.size(); j++) {
+                            if (belowRowSquares.get(j).hasPiece()) {
+                                if (belowRowSquares.get(j).getPiece() instanceof King && belowRowSquares.get(j).getPiece().getColor() != this.getColor()) continue;
+                                removeSquares.addAll(belowRowSquares.subList(j + 1, belowRowSquares.size()));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        squares.removeAll(removeSquares);
+
+        return squares;
     }
 
     /*
@@ -56,6 +208,11 @@ public abstract class Piece {
      */
     public void addCheckablePiece(Piece piece) {
         checkablePieces.add(piece);
+    }
+
+
+    public Color getColor() {
+        return this.color;
     }
 
     // All the squares
@@ -82,8 +239,10 @@ public abstract class Piece {
         return this.square;
     }
 
+    public abstract char abbreviation();
+
     public String toString() {
-        return this.getClass().getSimpleName();
+        return String.valueOf(abbreviation());
     }
 
 

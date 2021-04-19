@@ -1,13 +1,14 @@
 package schack.entities;
 
 import schack.Board;
+import schack.Color;
 import schack.Square;
 
-import java.util.List;
+import java.util.*;
 
 public class Rook extends Piece{
-    public Rook(Square square) {
-        super(square);
+    public Rook(Color color, Square square) {
+        super(color, square);
     }
 
     @Override
@@ -17,26 +18,34 @@ public class Rook extends Piece{
 
     @Override
     public List<Square> getAffectedSquares() {
-        return null;
+        Set<Square> squares = new LinkedHashSet<>();
+        squares.addAll(this.getAffectedColumnSquares());
+        squares.addAll(this.getAffectedRowSquares());
+
+        return new ArrayList<>(squares);
     }
 
     @Override
     public List<Square> getAffectedRowSquares() {
-        return null;
+        return new ArrayList<>(super.getRowSquares());
     }
 
     @Override
     public List<Square> getAffectedColumnSquares() {
-        return null;
+        return new ArrayList<>(super.getColumnSquares());
     }
 
     @Override
     public List<Square> getAffectedDiagonalOneSquares() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public List<Square> getAffectedDiagonalTwoSquares() {
-        return null;
+        return Collections.emptyList();
+    }
+    @Override
+    public char abbreviation() {
+        return 'R';
     }
 }

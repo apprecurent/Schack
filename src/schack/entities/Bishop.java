@@ -1,13 +1,14 @@
 package schack.entities;
 
 import schack.Board;
+import schack.Color;
 import schack.Square;
 
-import java.util.List;
+import java.util.*;
 
 public class Bishop extends Piece {
-    public Bishop(Square square) {
-        super( square);
+    public Bishop(Color color, Square square) {
+        super(color, square);
     }
 
     @Override
@@ -17,26 +18,35 @@ public class Bishop extends Piece {
 
     @Override
     public List<Square> getAffectedSquares() {
-        return null;
+        Set<Square> squares = new LinkedHashSet<>();
+        squares.addAll(this.getAffectedDiagonalOneSquares());
+        squares.addAll(this.getAffectedDiagonalTwoSquares());
+
+        return new ArrayList<>(squares);
     }
 
     @Override
     public List<Square> getAffectedRowSquares() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public List<Square> getAffectedColumnSquares() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public List<Square> getAffectedDiagonalOneSquares() {
-        return null;
+        return new ArrayList<>(super.getDiagonalOneSquares());
     }
 
     @Override
     public List<Square> getAffectedDiagonalTwoSquares() {
-        return null;
+        return new ArrayList<>(super.getDiagonalTwoSquares());
+    }
+
+    @Override
+    public char abbreviation() {
+        return 'B';
     }
 }

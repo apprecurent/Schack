@@ -1,6 +1,7 @@
 package schack;
 
 import schack.entities.Piece;
+import schack.exception.NoPieceException;
 import schack.fields.Column;
 import schack.fields.Diagonal;
 import schack.fields.Row;
@@ -20,6 +21,15 @@ public class Square {
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+    }
+
+    public Piece getPiece() {
+        try {
+            if (!hasPiece()) throw new NoPieceException();
+        } catch (NoPieceException e) {
+            System.out.println(this + " does not contain a Piece");
+        }
+        return this.piece;
     }
 
     public boolean hasPiece() {
@@ -47,7 +57,7 @@ public class Square {
     }
 
     public String toString() {
-        String pieceString = hasPiece() ?  ": "+ piece.toString() : "";
+        String pieceString = hasPiece() ?  ": "+ piece.toString() : ": X";
         String string = "[" +column.getId() + ", " + row.getId()  + pieceString + "]";
         return string;
     }

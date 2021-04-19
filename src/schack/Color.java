@@ -1,4 +1,11 @@
 package schack;
 
-public class Color {
+public enum Color {
+
+    WHITE, BLACK;
+
+    public Color getColor() {
+        return this;
+    }
+
 }
